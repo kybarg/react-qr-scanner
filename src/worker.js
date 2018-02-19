@@ -1,7 +1,7 @@
 // jsQR is concatenated by gulp
 
 self.addEventListener('message', function(e) {
-  const decoded = jsQR.decodeQRFromImage(
+  const decoded = jsQR(
     e.data.data,
     e.data.width,
     e.data.height
