@@ -5,7 +5,7 @@ A [React](https://facebook.github.io/react/) component for reading QR codes from
 Thanks to initial repo https://github.com/JodusNodus/react-qr-reader
 
 ## Demo
-[thomasbilliet.com/react-qr-scanner](https://thomasbilliet.com/react-qr-scanner)
+[kybarg.github.io/react-qr-scanner/](https://kybarg.github.io/react-qr-scanner/)
 
 ## Known Issues
 - Due to browser implementations the camera can only be accessed over https or localhost.
