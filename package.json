@@ -5,6 +5,7 @@
   "main": "./lib/index.js",
   "scripts": {
     "storybook": "start-storybook -p 9001",
+    "storybook:export": "build-storybook -c .storybook -o ./docs",
     "build": "gulp",
     "build:watch": "gulp watch",
     "lint": "eslint -c ./.eslintrc.json ./src"
