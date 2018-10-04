@@ -3,15 +3,16 @@ const fs = require('fs')
 const del = require('del')
 const inlineStr = require('gulp-inline-str')
 const babel = require('gulp-babel')
-const uglify = require('gulp-uglify')
+const uglify = require('gulp-butternut')
 const concat = require('gulp-concat')
+const path = require('path')
 
 const babelOptions = JSON.parse(fs.readFileSync('./.babelrc', 'utf8'))
 
 const paths = {
   scripts: [ 'src/index.js', 'src/getDeviceId.js', 'src/havePropsChanged.js', 'src/errors.js' ],
   worker: 'src/worker.js',
-  jsQR: 'node_modules/jsqr/dist/jsQR.js',
+  jsQR: path.relative('./', require.resolve('jsqr')),
   destination: './lib',
 }
 
