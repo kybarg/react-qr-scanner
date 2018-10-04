@@ -269,15 +269,15 @@ module.exports = class Reader extends Component {
       <section className={className}>
         {legacyMode
           ? <div>
-              <input
-                style={hiddenStyle}
-                type="file"
-                accept="image/*"
-                ref={this.setRefFactory('input')}
-                onChange={this.handleInputChange}
-              />
-              <img style={previewStyle} ref={this.setRefFactory('img')} onLoad={onImageLoad} />
-            </div>
+            <input
+              style={hiddenStyle}
+              type="file"
+              accept="image/*"
+              ref={this.setRefFactory('input')}
+              onChange={this.handleInputChange}
+            />
+            <img style={previewStyle} ref={this.setRefFactory('img')} onLoad={onImageLoad} />
+          </div>
           : <video style={previewStyle} ref={this.setRefFactory('preview')} />}
         <canvas style={hiddenStyle} ref={this.setRefFactory('canvas')} />
       </section>
