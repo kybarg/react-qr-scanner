@@ -7,7 +7,7 @@ function defaultDeviceIdChooser(filteredDevices, videoDevices) {
     : videoDevices[0].deviceId
 }
 
-module.exports = function getDeviceId(facingMode, chooseDeviceId = defaultDeviceIdChooser) {
+function getDeviceId(facingMode, chooseDeviceId = defaultDeviceIdChooser) {
   // Get manual deviceId from available devices.
   return new Promise((resolve, reject) => {
     let enumerateDevices
@@ -43,3 +43,5 @@ module.exports = function getDeviceId(facingMode, chooseDeviceId = defaultDevice
     })
   })
 }
+
+export default getDeviceId

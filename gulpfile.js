@@ -20,26 +20,26 @@ gulp.task('clean', function() {
   return del([ paths.destination + '/*.js' ])
 })
 
-gulp.task('worker', [ 'clean' ], function() {
+gulp.task('worker', gulp.series('clean', function() {
   return gulp
     .src([ paths.jsQR, paths.worker ])
     .pipe(concat('worker.js'))
     .pipe(uglify())
     .pipe(gulp.dest(paths.destination))
-})
+}))
 
-gulp.task('build', [ 'worker' ], function() {
+gulp.task('build', gulp.series('worker', function() {
   return gulp
     .src(paths.scripts)
     .pipe(inlineStr({ basePath: paths.destination }))
     .pipe(babel(babelOptions))
     .pipe(gulp.dest(paths.destination))
-})
+}))
 
 // Rerun the task when a file changes
 gulp.task('watch', function() {
-  gulp.watch(paths.scripts, [ 'build' ])
+  gulp.watch(paths.scripts, gulp.series('build'))
 })
 
 // The default task (called when you run `gulp` from cli)
-gulp.task('default', [ 'build' ])
+gulp.task('default', gulp.series('build'))

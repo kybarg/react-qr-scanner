@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import { storiesOf } from '@storybook/react'
-import { action } from '@storybook/addon-actions'
-import Reader from './lib'
+import React, { Component } from "react";
+import { storiesOf } from "@storybook/react";
+import { action } from "@storybook/addon-actions";
+import Reader from "./lib";
 
 class Wrapper extends Component {
   constructor(props) {
@@ -108,7 +108,7 @@ class Wrapper extends Component {
   }
 }
 
-storiesOf('QR Reader', module)
+storiesOf("QR Reader", module)
   .add('Camera not specified', () => <Wrapper />)
   .add('Choose camera', () => <Wrapper selectFacingMode />)
   .add('Legacy mode', () => <Wrapper legacyMode />)
