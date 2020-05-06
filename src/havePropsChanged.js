@@ -1,4 +1,4 @@
-module.exports = function havePropsChanged(prevProps, nextProps, keys) {
+ function havePropsChanged(prevProps, nextProps, keys) {
   const changedProps = []
   keys.forEach(key => {
     if (prevProps[key] != nextProps[key]) {
@@ -7,3 +7,5 @@ module.exports = function havePropsChanged(prevProps, nextProps, keys) {
   })
   return changedProps
 }
+
+export default havePropsChanged

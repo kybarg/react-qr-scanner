@@ -1,8 +1,7 @@
-const React = require('react')
-const { Component } = React
-const PropTypes = require('prop-types')
-const getDeviceId = require('./getDeviceId')
-const havePropsChanged = require('./havePropsChanged')
+import React, { Component } from 'react'
+import PropTypes from 'prop-types'
+import getDeviceId from './getDeviceId'
+import havePropsChanged from './havePropsChanged'
 
 // Require adapter to support older browser implementations
 require('webrtc-adapter')
@@ -15,7 +14,7 @@ const workerBlob = new Blob([__inline('../lib/worker.js')], {
 // Props that are allowed to change dynamicly
 const propsKeys = ['delay', 'legacyMode', 'facingMode']
 
-module.exports = class Reader extends Component {
+class Reader extends Component {
   static propTypes = {
     onScan: PropTypes.func.isRequired,
     onError: PropTypes.func.isRequired,
@@ -265,13 +264,13 @@ module.exports = class Reader extends Component {
       ...style,
     }
 
-    return (
+    return ( 
       <section className={className}>
         {legacyMode
           ? <div>
             <input
               style={hiddenStyle}
-              type="file"
+              type="file" 
               accept="image/*"
               ref={this.setRefFactory('input')}
               onChange={this.handleInputChange}
@@ -284,3 +283,5 @@ module.exports = class Reader extends Component {
     )
   }
 }
+
+export default Reader

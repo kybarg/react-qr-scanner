@@ -4,6 +4,6 @@ function NoVideoInputDevicesError() {
 }
 NoVideoInputDevicesError.prototype = new Error()
 
-module.exports = {
+export default {
   NoVideoInputDevicesError,
 }
