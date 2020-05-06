@@ -51,18 +51,18 @@ class Reader extends Component {
     const changedProps = havePropsChanged(this.props, nextProps, propsKeys)
 
     for (const prop of changedProps) {
-      if (prop == 'facingMode') {
+      if (prop === 'facingMode') {
         this.clearComponent()
         this.initiate(nextProps)
         break
-      } else if (prop == 'delay') {
-        if (this.props.delay == false && !nextProps.legacyMode) {
+      } else if (prop === 'delay') {
+        if (this.props.delay === false && !nextProps.legacyMode) {
           this.timeout = setTimeout(this.check, nextProps.delay)
         }
-        if (nextProps.delay == false) {
+        if (nextProps.delay === false) {
           clearTimeout(this.timeout)
         }
-      } else if (prop == 'legacyMode') {
+      } else if (prop === 'legacyMode') {
         if (this.props.legacyMode && !nextProps.legacyMode) {
           this.clearComponent()
           this.initiate(nextProps)
@@ -152,11 +152,11 @@ class Reader extends Component {
     const preview = this.els.preview
     preview.play()
 
-    if (typeof onLoad == 'function') {
+    if (typeof onLoad === 'function') {
       onLoad()
     }
 
-    if (typeof delay == 'number') {
+    if (typeof delay === 'number') {
       this.timeout = setTimeout(this.check, delay)
     }
 
@@ -209,7 +209,7 @@ class Reader extends Component {
 
     onScan((decoded && decoded.data) || null)
 
-    if (!legacyMode && typeof delay == 'number' && this.worker) {
+    if (!legacyMode && typeof delay === 'number' && this.worker) {
       this.timeout = setTimeout(this.check, delay)
     }
   }
@@ -222,7 +222,7 @@ class Reader extends Component {
     // Reset componentDidUpdate
     this.componentDidUpdate = undefined
 
-    if (typeof this.props.onLoad == 'function') {
+    if (typeof this.props.onLoad === 'function') {
       this.props.onLoad()
     }
   }
