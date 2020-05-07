@@ -7,6 +7,7 @@ import havePropsChanged from './havePropsChanged'
 require('webrtc-adapter')
 
 // Inline worker.js as a string value of workerBlob.
+// eslint-disable-next-line no-undef
 const workerBlob = new Blob([__inline('../lib/worker.js')], {
   type: 'application/javascript',
 })
@@ -15,10 +16,10 @@ const workerBlob = new Blob([__inline('../lib/worker.js')], {
 const propsKeys = ['delay', 'legacyMode', 'facingMode']
 
 class Reader extends Component {
-  
+
   constructor(props) {
     super(props)
-    
+
     this.els = {}
     // Bind function to the class
     this.initiate = this.initiate.bind(this)
@@ -205,9 +206,16 @@ class Reader extends Component {
 
   handleWorkerMessage(e) {
     const { onScan, legacyMode, delay } = this.props
+    const { preview, canvas, img } = this.els
     const decoded = e.data
-
-    onScan((decoded && decoded.data) || null)
+    if (decoded && decoded.data) {
+      const ctx = canvas.getContext('2d')
+      ctx.drawImage(legacyMode ? img : preview, 0, 0, canvas.width, canvas.height)
+      const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
+      onScan(decoded.data, imageData)
+    } else {
+      onScan(null)
+    }
 
     if (!legacyMode && typeof delay === 'number' && this.worker) {
       this.timeout = setTimeout(this.check, delay)
