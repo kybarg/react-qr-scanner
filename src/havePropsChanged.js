@@ -1,4 +1,4 @@
- function havePropsChanged(prevProps, nextProps, keys) {
+function havePropsChanged(prevProps, nextProps, keys) {
   const changedProps = []
   keys.forEach(key => {
     if (prevProps[key] != nextProps[key]) {
