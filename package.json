@@ -1,6 +1,6 @@
 {
   "name": "react-qr-scanner",
-  "version": "0.0.8",
+  "version": "0.0.9",
   "description": "A react component for reading QR codes from the webcam.",
   "main": "./lib/index.js",
   "scripts": {
