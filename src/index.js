@@ -21,6 +21,7 @@ class Reader extends Component {
     super(props)
 
     this.els = {}
+    this.initialStreamStarted = false;
     // Bind function to the class
     this.initiate = this.initiate.bind(this)
     this.initiateLegacyMode = this.initiateLegacyMode.bind(this)
@@ -106,20 +107,25 @@ class Reader extends Component {
   }
 
   initiate(props = this.props) {
-    const { onError, facingMode, chooseDeviceId } = props
+    const { onError, facingMode, chooseDeviceId, initialStream } = props
 
-    getDeviceId(facingMode, chooseDeviceId)
-      .then(deviceId => {
-        return navigator.mediaDevices.getUserMedia({
-          video: {
-            deviceId,
-            width: { min: 360, ideal: 1280, max: 1920 },
-            height: { min: 240, ideal: 720, max: 1080 },
-          },
+    if (initialStream && !this.initialStreamStarted) {
+      this.initialStreamStarted = true;
+      this.handleVideo(initialStream);
+    } else {
+      getDeviceId(facingMode, chooseDeviceId)
+        .then(deviceId => {
+          return navigator.mediaDevices.getUserMedia({
+            video: {
+              deviceId,
+              width: { min: 360, ideal: 1280, max: 1920 },
+              height: { min: 240, ideal: 720, max: 1080 },
+            },
+          })
         })
-      })
-      .then(this.handleVideo)
-      .catch(onError)
+        .then(this.handleVideo)
+        .catch(onError)
+    }
   }
 
   handleVideo(stream) {

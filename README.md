@@ -130,6 +130,12 @@ Type: `function`, Optional, Arguments: (1) video devices matching `facingMode`, 
 
 Called when choosing which device to use for scanning. By default chooses the first video device matching `facingMode`, if no devices match the first video device found is choosen.
 
+**initialStream**
+
+Type: `MediaStream`, Optional
+
+Existing MediaStream to use initially.
+
 ## Dev
 
 ### Install dependencies
