@@ -27,7 +27,7 @@ function getDeviceId(facingMode, chooseDeviceId = defaultDeviceIdChooser) {
         return
       } else if (videoDevices.length == 1) {
         // Only 1 video device available thus stop here
-        resolve(devices[0].deviceId)
+        resolve(videoDevices[0].deviceId)
         return
       }
 
