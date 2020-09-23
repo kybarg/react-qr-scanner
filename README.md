@@ -18,46 +18,38 @@ Thanks to initial repo https://github.com/JodusNodus/react-qr-reader
 ## Example
 
 ```js
-import React, { Component } from 'react'
-import QrReader from 'react-qr-scanner'
+import React, { useState } from "react";
+import QrReader from "react-qr-scanner";
 
-class Test extends Component {
-  constructor(props){
-    super(props)
-    this.state = {
-      delay: 100,
-      result: 'No result',
-    }
+function Example() {
+  const [codeRead, setCodeRead] = useState("");
 
-    this.handleScan = this.handleScan.bind(this)
+  function onScan(result) {
+    console.log(`Identified: ${result}`);
+    setCodeRead(result);
   }
-  handleScan(data){
-    this.setState({
-      result: data,
-    })
-  }
-  handleError(err){
-    console.error(err)
-  }
-  render(){
-    const previewStyle = {
-      height: 240,
-      width: 320,
-    }
 
-    return(
-      <div>
-        <QrReader
-          delay={this.state.delay}
-          style={previewStyle}
-          onError={this.handleError}
-          onScan={this.handleScan}
-          />
-        <p>{this.state.result}</p>
-      </div>
-    )
+  function onError(error) {
+    console.error(error);
   }
+
+  return (
+    <div>
+      <QrReader
+        delay={500}
+        style={{
+          width: 320,
+          height: 240,
+        }}
+        onError={onError}
+        onScan={onScan}
+      />
+      <p>{codeRead}</p>
+    </div>
+  );
 }
+
+export default Example;
 ```
 
 ## Props
