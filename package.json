@@ -3,6 +3,7 @@
   "version": "0.0.10",
   "description": "A react component for reading QR codes from the webcam.",
   "main": "./lib/index.js",
+  "types": "./types",
   "scripts": {
     "storybook": "start-storybook -p 9001",
     "storybook:export": "build-storybook -c .storybook -o ./docs",
