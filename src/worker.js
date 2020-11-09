@@ -1,7 +1,6 @@
-// jsQR is concatenated by gulp
+import jsQR from 'jsqr'
 
-self.addEventListener('message', function (e) {
-  // eslint-disable-next-line no-undef
+self.addEventListener('message', (e) => { // eslint-disable-line no-restricted-globals
   const decoded = jsQR(
     e.data.data,
     e.data.width,
