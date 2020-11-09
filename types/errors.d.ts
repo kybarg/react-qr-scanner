@@ -1,1 +1,0 @@
-export function NoVideoInputDevicesError(): void;

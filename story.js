@@ -1,7 +1,14 @@
-import React, { Component } from "react";
-import { storiesOf } from "@storybook/react";
-import { action } from '@storybook/addon-actions';
-import Reader from "./lib";
+import React, { Component } from 'react'
+import { storiesOf } from '@storybook/react'
+import { configureActions, action } from '@storybook/addon-actions'
+import Reader from '.'
+
+configureActions({
+  // Maximum depth of serialization for large objects
+  depth: 1,
+  // Limit the number of items logged into the actions panel
+  limit: 20,
+});
 
 class Wrapper extends Component {
   constructor(props) {
@@ -83,18 +90,16 @@ class Wrapper extends Component {
             </div>
           )
         }
-        {(cameraId || !selectFacingMode) && (<Reader
-          chooseDeviceId={this.selectCamera}
-          style={previewStyle}
+        {(<Reader
           onError={action('Error')}
           onScan={action('Scan')}
           onLoad={action('Load')}
-          onImageLoad={action('ImageLoad')}
-          ref="reader"
-          legacyMode={legacyMode}
-          maxImageSize={1000}
+          // onImageLoad={action('ImageLoad')}
+          // ref="reader"
+          // legacyMode={legacyMode}
+          // maxImageSize={1000}
           delay={this.state.delay}
-          className="reader-container"
+          // className="reader-container"
         />)}
         {
           legacyMode && (
