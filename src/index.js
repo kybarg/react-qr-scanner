@@ -13,18 +13,22 @@ const Reader = (props) => {
   const canvasEl = useRef(document.createElement('canvas'))
   const ctxRef = useRef(null)
   const requestRef = useRef()
-  const cancelRef = useRef(false)
 
   const isProcessingRef = useRef(false)
-  const worker = useMemo(createWorker, [createWorker])
+  // let worker = useMemo(createWorker, [createWorker])
+  const lastWorker = useRef(createWorker())
   useEffect(() => {
-    worker.onmessage = (e) => {
+    lastWorker.current = createWorker()
+    lastWorker.current.onmessage = (e) => {
       if (onScan) onScan(e.data ? { ...e.data, canvas: canvasEl.current } : null)
       isProcessingRef.current = false
     }
 
-    return () => worker.terminate()
-  }, [onScan, worker])
+    return () => {
+      isProcessingRef.current = false
+      lastWorker.current.terminate()
+    }
+  }, [onScan, createWorker])
 
   const check = useCallback(() => {
     const videoIsPlaying = videoEl.current && videoEl.current.readyState === videoEl.current.HAVE_ENOUGH_DATA
@@ -49,11 +53,11 @@ const Reader = (props) => {
       ctxRef.current.drawImage(videoEl.current, 0, 0, width, height)
       const imageData = ctxRef.current.getImageData(0, 0, width, height)
       // Send data to web-worker
-      worker.postMessage(imageData)
+      lastWorker.current.postMessage(imageData)
     }
 
     requestRef.current = requestAnimationFrame(check)
-  }, [resolution, worker])
+  }, [resolution, lastWorker.current])
 
   useEffect(() => {
     if (!videoEl) return
@@ -61,7 +65,6 @@ const Reader = (props) => {
     const constraints = JSON.parse(constraintsStr)
     navigator.mediaDevices.getUserMedia(constraints)
       .then((stream) => {
-        if (cancelRef.current) return
         streamRef.current = stream
 
         videoEl.current.srcObject = stream
@@ -75,7 +78,6 @@ const Reader = (props) => {
       .catch(onError)
 
     return () => {
-      cancelRef.current = true
       cancelAnimationFrame(requestRef.current)
       if (streamRef.current) streamRef.current.getTracks().forEach((track) => track.stop())
       streamRef.current = null

@@ -77,7 +77,7 @@ class Wrapper extends Component {
         {
           selectDelay && (
             <div>
-              <button onClick={() => this.setState({ delay: false })}>
+              <button onClick={() => this.setState({ delay: 0 })}>
                 Disable Delay
                 </button>
               <input
