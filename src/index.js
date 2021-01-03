@@ -5,7 +5,7 @@ import WebWorker from 'web-worker:./worker'
 const createWorker = () => new WebWorker()
 
 const Reader = (props) => {
-  const { constraints, mirrored, onError, onLoad, onScan, resolution, ...other } = props
+  const { constraints, onError, onLoad, onScan, resolution, ...other } = props
   const constraintsStr = JSON.stringify(constraints)
 
   const streamRef = useRef(null)
@@ -15,20 +15,20 @@ const Reader = (props) => {
   const requestRef = useRef()
 
   const isProcessingRef = useRef(false)
-  // let worker = useMemo(createWorker, [createWorker])
-  const lastWorker = useRef(createWorker())
+  const worker = useMemo(createWorker, [createWorker])
+
   useEffect(() => {
-    lastWorker.current = createWorker()
-    lastWorker.current.onmessage = (e) => {
+    return () => {
+      worker.terminate()
+    }
+  }, [worker])
+
+  useEffect(() => {
+    worker.onmessage = (e) => {
       if (onScan) onScan(e.data ? { ...e.data, canvas: canvasEl.current } : null)
       isProcessingRef.current = false
     }
-
-    return () => {
-      isProcessingRef.current = false
-      lastWorker.current.terminate()
-    }
-  }, [onScan, createWorker])
+  }, [onScan, worker])
 
   const check = useCallback(() => {
     const videoIsPlaying = videoEl.current && videoEl.current.readyState === videoEl.current.HAVE_ENOUGH_DATA
@@ -53,34 +53,36 @@ const Reader = (props) => {
       ctxRef.current.drawImage(videoEl.current, 0, 0, width, height)
       const imageData = ctxRef.current.getImageData(0, 0, width, height)
       // Send data to web-worker
-      lastWorker.current.postMessage(imageData)
+      worker.postMessage(imageData)
     }
 
     requestRef.current = requestAnimationFrame(check)
-  }, [resolution, lastWorker.current])
+  }, [resolution, worker])
 
   useEffect(() => {
-    if (!videoEl) return
-
     const constraints = JSON.parse(constraintsStr)
+
+    let isSubscribed = true
     navigator.mediaDevices.getUserMedia(constraints)
       .then((stream) => {
+        if (!isSubscribed) return null
         streamRef.current = stream
 
         videoEl.current.srcObject = stream
         videoEl.current.setAttribute('playsinline', true) // required to tell iOS safari we don't want fullscreen
         videoEl.current.play()
 
-        if (typeof onLoad === 'function') onLoad()
+        if (onLoad) onLoad()
 
         requestRef.current = requestAnimationFrame(check)
       })
-      .catch(onError)
+      .catch(error => (isSubscribed ? onError(error) : null))
 
     return () => {
       cancelAnimationFrame(requestRef.current)
       if (streamRef.current) streamRef.current.getTracks().forEach((track) => track.stop())
       streamRef.current = null
+      isSubscribed = false
     }
   }, [check, constraintsStr, onError, onLoad])
 
