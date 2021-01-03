@@ -53,7 +53,7 @@ class Wrapper extends Component {
 
   render() {
     const { selectFacingMode, selectDelay, legacyMode } = this.props
-    const { cameraId, devices } = this.state
+    const { loading, cameraId, devices } = this.state
 
     const previewStyle = { width: 320 }
     return (
@@ -90,22 +90,18 @@ class Wrapper extends Component {
             </div>
           )
         }
-        {(<Reader
-          onError={action('Error')}
+        {!loading && (<Reader
+          onError={console.error}
           onScan={action('Scan')}
           onLoad={action('Load')}
-          // onImageLoad={action('ImageLoad')}
-          // ref="reader"
-          // legacyMode={legacyMode}
-          // maxImageSize={1000}
           delay={this.state.delay}
-          // className="reader-container"
+          constraints={cameraId && ({ audio: false, video: { deviceId: cameraId } })}
         />)}
         {
           legacyMode && (
             <button onClick={() => this.refs.reader.openImageDialog()}>
               Open Image Dialog
-              </button>
+            </button>
           )
         }
       </div>
