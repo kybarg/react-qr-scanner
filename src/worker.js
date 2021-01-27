@@ -7,7 +7,6 @@ self.addEventListener('message', (e) => { // eslint-disable-line no-restricted-g
   const binaryBitmap = new BinaryBitmap(new HybridBinarizer(luminanceSource))
   try {
     const decoded = reader.decode(binaryBitmap)
-    console.log(decoded)
     postMessage(decoded)
   } catch (err) {
     postMessage(null)
