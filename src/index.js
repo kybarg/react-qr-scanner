@@ -211,8 +211,6 @@ class Reader extends Component {
   }
 
   handleWorkerMessage(e) {
-    console.log('>>> QR - handleWorkerMessage', e)
-
     const { onScan, legacyMode, delay } = this.props
     const { preview, canvas, img } = this.els
     const decoded = e.data
