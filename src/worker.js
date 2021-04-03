@@ -7,5 +7,10 @@ self.addEventListener('message', function (e) {
     e.data.width,
     e.data.height
   )
-  postMessage(decoded)
+  if (decoded) {
+    console.log('>>>> jsQR Decoded data', decoded)
+    postMessage(decoded.data)
+  } else {
+    postMessage(null)
+  }
 })

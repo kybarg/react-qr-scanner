@@ -211,14 +211,16 @@ class Reader extends Component {
   }
 
   handleWorkerMessage(e) {
+    console.log('>>> QR - handleWorkerMessage', e)
+
     const { onScan, legacyMode, delay } = this.props
     const { preview, canvas, img } = this.els
     const decoded = e.data
-    if (decoded && decoded.data) {
+    if (decoded) {
       const ctx = canvas.getContext('2d')
       ctx.drawImage(legacyMode ? img : preview, 0, 0, canvas.width, canvas.height)
       const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height)
-      onScan(decoded.data, imageData)
+      onScan(decoded, imageData)
     } else {
       onScan(null)
     }
