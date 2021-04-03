@@ -7,5 +7,9 @@ self.addEventListener('message', function (e) {
     e.data.width,
     e.data.height
   )
-  postMessage(decoded)
+  if (decoded) {
+    postMessage(decoded.data)
+  } else {
+    postMessage(null)
+  }
 })
