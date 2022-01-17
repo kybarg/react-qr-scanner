@@ -1,48 +1,75 @@
-import babel from 'rollup-plugin-babel';
+import babel from '@rollup/plugin-babel';
 import resolve from '@rollup/plugin-node-resolve';
 import commonjs from '@rollup/plugin-commonjs';
-import external from 'rollup-plugin-peer-deps-external';
 import webWorkerLoader from 'rollup-plugin-web-worker-loader';
+
 import pkg from './package.json';
 
-export default [
-  // browser-friendly UMD build
-  {
-    input: 'src/index.js',
-    output: [
-      {
-        file: pkg.main,
-        format: 'cjs',
-        exports: 'default'
-      },
-      {
-        file: pkg.module,
-        format: 'esm'
-      }
-    ],
-    plugins: [
-      external(),
-      webWorkerLoader({ targetPlatform: 'browser' }),
-      babel({
-        exclude: 'node_modules/**'
-      }),
-      resolve(), // so Rollup can find `ms`
-      commonjs() // so Rollup can convert `ms` to an ES module
-    ]
-  },
+const INPUT_FILE_PATH = 'src/index.js';
+const OUTPUT_NAME = 'RectQrScanner';
 
-  // CommonJS (for Node) and ES module (for bundlers) build.
-  // (We could have three entries in the configuration array
-  // instead of two, but it's quicker to generate multiple
-  // builds from a single configuration where possible, using
-  // an array for the `output` option, where we can specify
-  // `file` and `format` for each target)
-  // {
-  // 	input: 'src/index.js',
-  // 	// external: ['ms'],
-  // 	output: [
-  // 		{ file: pkg.main, format: 'cjs' },
-  // 		{ file: pkg.module, format: 'es' }
-  // 	]
-  // }
+const GLOBALS = {
+  react: 'React',
+  'react-dom': 'ReactDOM',
+  'prop-types': 'PropTypes',
+};
+
+const PLUGINS = [
+  babel({
+    babelHelpers: 'runtime',
+    exclude: 'node_modules/**',
+  }),
+  resolve({
+    browser: true,
+    resolveOnly: [
+      /^(?!react$)/,
+      /^(?!react-dom$)/,
+      /^(?!prop-types)/,
+    ],
+  }),
+  commonjs(),
 ];
+
+const EXTERNAL = [
+  'react',
+  'react-dom',
+  'prop-types',
+];
+
+// https://github.com/rollup/plugins/tree/master/packages/babel#babelhelpers
+const CJS_AND_ES_EXTERNALS = EXTERNAL.concat(/@baberk\/runtime/, /@zxing\/library/);
+
+const OUTPUT_DATA = [
+  {
+    file: pkg.browser,
+    format: 'umd',
+  },
+  {
+    file: pkg.main,
+    format: 'cjs',
+    exports: 'default',
+  },
+  {
+    file: pkg.module,
+    format: 'es',
+  },
+];
+
+const config = OUTPUT_DATA.map(({ file, format, exports }) => ({
+  input: INPUT_FILE_PATH,
+  output: {
+    file,
+    format,
+    exports,
+    name: OUTPUT_NAME,
+    globals: GLOBALS,
+  },
+  external: ['cjs', 'es'].includes(format) ? CJS_AND_ES_EXTERNALS : EXTERNAL,
+  plugins: [webWorkerLoader({
+    targetPlatform: 'browser',
+    external: ['cjs', 'es'].includes(format) ? CJS_AND_ES_EXTERNALS : EXTERNAL,
+    inline: !['cjs', 'es'].includes(format),
+  })].concat(...PLUGINS),
+}));
+
+export default config;

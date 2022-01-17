@@ -1,8 +1,26 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react'
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import PropTypes from 'prop-types'
 import WebWorker from 'web-worker:./worker'
 
 const createWorker = () => new WebWorker()
+
+const stopMediaStream = (stream) => {
+  if (stream) {
+    if (stream.getVideoTracks && stream.getAudioTracks) {
+      stream.getVideoTracks().map(track => {
+        stream.removeTrack(track);
+        track.stop();
+      });
+      stream.getAudioTracks().map(track => {
+        stream.removeTrack(track);
+        track.stop();
+      });
+    }
+    else {
+      stream.stop();
+    }
+  }
+}
 
 const Reader = (props) => {
   const { constraints, onError, onLoad, onScan, resolution, ...other } = props
@@ -13,6 +31,7 @@ const Reader = (props) => {
   const canvasEl = useRef(document.createElement('canvas'))
   const ctxRef = useRef(null)
   const requestRef = useRef()
+  const [src, setSrc] = useState(null)
 
   const isProcessingRef = useRef(false)
   const worker = useMemo(createWorker, [createWorker])
@@ -65,28 +84,38 @@ const Reader = (props) => {
     let isSubscribed = true
     navigator.mediaDevices.getUserMedia(constraints)
       .then((stream) => {
-        if (!isSubscribed) return null
-        streamRef.current = stream
+        if (!isSubscribed) {
+          stopMediaStream(stream)
+        } else {
+          streamRef.current = stream
 
-        videoEl.current.srcObject = stream
-        videoEl.current.setAttribute('playsinline', true) // required to tell iOS safari we don't want fullscreen
-        videoEl.current.play()
+          try {
+            if (videoEl.current) {
+              videoEl.current.srcObject = stream
+              videoEl.current.setAttribute('playsinline', true) // required to tell iOS safari we don't want fullscreen
+            }
+          } catch (error) {
+            setSrc(window.URL.createObjectURL(stream))
+          }
 
-        if (onLoad) onLoad()
+          if (onLoad) onLoad()
 
-        requestRef.current = requestAnimationFrame(check)
+          requestRef.current = requestAnimationFrame(check)
+        }
       })
       .catch(error => (isSubscribed ? onError(error) : null))
 
     return () => {
       cancelAnimationFrame(requestRef.current)
-      if (streamRef.current) streamRef.current.getTracks().forEach((track) => track.stop())
-      streamRef.current = null
       isSubscribed = false
+      stopMediaStream(streamRef.current)
+      if (src) {
+        window.URL.revokeObjectURL(src);
+      }
     }
   }, [check, constraintsStr, onError, onLoad])
 
-  return (<video ref={videoEl} {...other} />)
+  return (<video autoPlay playsInline src={src} ref={videoEl} {...other} />)
 }
 
 Reader.propTypes = {
