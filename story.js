@@ -1,14 +1,7 @@
 import React, { Component } from 'react'
 import { storiesOf } from '@storybook/react'
-import { configureActions, action } from '@storybook/addon-actions'
+import { action } from '@storybook/addon-actions'
 import Reader from '.'
-
-configureActions({
-  // Maximum depth of serialization for large objects
-  depth: 1,
-  // Limit the number of items logged into the actions panel
-  limit: 20,
-});
 
 class Wrapper extends Component {
   constructor(props) {
@@ -79,7 +72,7 @@ class Wrapper extends Component {
             <div>
               <button onClick={() => this.setState({ delay: 0 })}>
                 Disable Delay
-                </button>
+              </button>
               <input
                 placeholder="Delay in ms"
                 type="number"
