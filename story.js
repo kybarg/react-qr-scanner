@@ -96,8 +96,25 @@ const Wrapper = ({
   );
 };
 
-storiesOf("QR Reader", module)
-  .add("Camera not specified", () => <Wrapper />)
-  .add("Choose camera", () => <Wrapper selectFacingMode />)
-  .add("Legacy mode", () => <Wrapper legacyMode />)
-  .add("Choose delay", () => <Wrapper selectDelay />);
+
+export default {
+  /* 👇 The title prop is optional.
+  * See https://storybook.js.org/docs/react/configure/overview#configure-story-loading
+  * to learn how to generate automatic titles
+  */
+  title: 'QR Reader',
+  component: Reader,
+  decorators: [
+    (Story) => (
+      <div style={{ margin: '3em' }}>
+        <Story />
+      </div>
+    ),
+  ],
+};
+
+// storiesOf("QR Reader", module)
+//   .add("Camera not specified", () => <Wrapper />)
+//   .add("Choose camera", () => <Wrapper selectFacingMode />)
+//   .add("Legacy mode", () => <Wrapper legacyMode />)
+//   .add("Choose delay", () => <Wrapper selectDelay />);
