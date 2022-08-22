@@ -7,11 +7,11 @@ const createWorker = () => new WebWorker()
 const stopMediaStream = (stream) => {
   if (stream) {
     if (stream.getVideoTracks && stream.getAudioTracks) {
-      stream.getVideoTracks().map(track => {
+      stream.getVideoTracks().forEach(track => {
         stream.removeTrack(track);
         track.stop();
       });
-      stream.getAudioTracks().map(track => {
+      stream.getAudioTracks().forEach(track => {
         stream.removeTrack(track);
         track.stop();
       });
@@ -113,7 +113,7 @@ const Reader = (props) => {
         window.URL.revokeObjectURL(src);
       }
     }
-  }, [check, constraintsStr, onError, onLoad])
+  }, [check, constraintsStr, onError, onLoad, src])
 
   return (<video autoPlay playsInline src={src} ref={videoEl} {...other} />)
 }

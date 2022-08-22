@@ -64,11 +64,11 @@ const config = OUTPUT_DATA.map(({ file, format, exports }) => ({
     name: OUTPUT_NAME,
     globals: GLOBALS,
   },
-  external: ['cjs', 'es'].includes(format) ? CJS_AND_ES_EXTERNALS : EXTERNAL,
+  // external: ['cjs', 'es'].includes(format) ? CJS_AND_ES_EXTERNALS : EXTERNAL,
   plugins: [webWorkerLoader({
     targetPlatform: 'browser',
-    external: ['cjs', 'es'].includes(format) ? CJS_AND_ES_EXTERNALS : EXTERNAL,
-    inline: !['cjs', 'es'].includes(format),
+    // external: ['cjs', 'es'].includes(format) ? CJS_AND_ES_EXTERNALS : EXTERNAL,
+    // inline: !['cjs', 'es'].includes(format),
   })].concat(...PLUGINS),
 }));
 
