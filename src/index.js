@@ -6,7 +6,7 @@ import React, {
   useState,
 } from "react";
 import PropTypes from "prop-types";
-import WebWorker from "web-worker:./worker";
+import WebWorker from "worker!worker.js";
 
 const createWorker = () => new WebWorker();
 
