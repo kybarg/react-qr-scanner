@@ -24,7 +24,7 @@ const PLUGINS = [
 const EXTERNAL = ["react", "react-dom", "prop-types"];
 
 // https://github.com/rollup/plugins/tree/master/packages/babel#babelhelpers
-const CJS_AND_ES_EXTERNALS = EXTERNAL.concat(/@baberk\/runtime/);
+const CJS_AND_ES_EXTERNALS = EXTERNAL.concat(/@babel\/runtime/);
 
 const OUTPUT_DATA = [
   {

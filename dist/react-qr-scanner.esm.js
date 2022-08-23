@@ -1,140 +1,9 @@
+import _extends from '@babel/runtime/helpers/extends';
+import _defineProperty from '@babel/runtime/helpers/defineProperty';
+import _slicedToArray from '@babel/runtime/helpers/slicedToArray';
+import _objectWithoutProperties from '@babel/runtime/helpers/objectWithoutProperties';
 import React, { useRef, useState, useMemo, useEffect, useCallback } from 'react';
 import PropTypes from 'prop-types';
-
-function _extends() {
-  _extends_1 = _extends = Object.assign || function (target) {
-    for (var i = 1; i < arguments.length; i++) {
-      var source = arguments[i];
-
-      for (var key in source) {
-        if (Object.prototype.hasOwnProperty.call(source, key)) {
-          target[key] = source[key];
-        }
-      }
-    }
-
-    return target;
-  };
-
-  return _extends.apply(this, arguments);
-}
-
-var _extends_1 = _extends;
-
-var _extends$1 = _extends_1;
-
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-var defineProperty = _defineProperty;
-
-function _arrayWithHoles(arr) {
-  if (Array.isArray(arr)) return arr;
-}
-
-var arrayWithHoles$1 = _arrayWithHoles;
-
-function _iterableToArrayLimit(arr, i) {
-  if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
-    return;
-  }
-
-  var _arr = [];
-  var _n = true;
-  var _d = false;
-  var _e = undefined;
-
-  try {
-    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
-      _arr.push(_s.value);
-
-      if (i && _arr.length === i) break;
-    }
-  } catch (err) {
-    _d = true;
-    _e = err;
-  } finally {
-    try {
-      if (!_n && _i["return"] != null) _i["return"]();
-    } finally {
-      if (_d) throw _e;
-    }
-  }
-
-  return _arr;
-}
-
-var iterableToArrayLimit$1 = _iterableToArrayLimit;
-
-function _nonIterableRest() {
-  throw new TypeError("Invalid attempt to destructure non-iterable instance");
-}
-
-var nonIterableRest$1 = _nonIterableRest;
-
-var arrayWithHoles = arrayWithHoles$1;
-
-var iterableToArrayLimit = iterableToArrayLimit$1;
-
-var nonIterableRest = nonIterableRest$1;
-
-function _slicedToArray(arr, i) {
-  return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || nonIterableRest();
-}
-
-var slicedToArray = _slicedToArray;
-
-function _objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-
-var objectWithoutPropertiesLoose$1 = _objectWithoutPropertiesLoose;
-
-var objectWithoutPropertiesLoose = objectWithoutPropertiesLoose$1;
-
-function _objectWithoutProperties(source, excluded) {
-  if (source == null) return {};
-  var target = objectWithoutPropertiesLoose(source, excluded);
-  var key, i;
-
-  if (Object.getOwnPropertySymbols) {
-    var sourceSymbolKeys = Object.getOwnPropertySymbols(source);
-
-    for (i = 0; i < sourceSymbolKeys.length; i++) {
-      key = sourceSymbolKeys[i];
-      if (excluded.indexOf(key) >= 0) continue;
-      if (!Object.prototype.propertyIsEnumerable.call(source, key)) continue;
-      target[key] = source[key];
-    }
-  }
-
-  return target;
-}
-
-var objectWithoutProperties = _objectWithoutProperties;
 
 var workerHelper = {};
 
@@ -203,7 +72,7 @@ var _excluded = ["constraints", "onError", "onLoad", "onScan", "resolution"];
 
 function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); enumerableOnly && (symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; })), keys.push.apply(keys, symbols); } return keys; }
 
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
+function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = null != arguments[i] ? arguments[i] : {}; i % 2 ? ownKeys(Object(source), !0).forEach(function (key) { _defineProperty(target, key, source[key]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } return target; }
 
 var createWorker = function createWorker() {
   return new WebWorker();
@@ -232,7 +101,7 @@ var Reader = function Reader(props) {
       onLoad = props.onLoad,
       onScan = props.onScan,
       resolution = props.resolution,
-      other = objectWithoutProperties(props, _excluded);
+      other = _objectWithoutProperties(props, _excluded);
 
   var constraintsStr = JSON.stringify(constraints);
   var streamRef = useRef(null);
@@ -242,7 +111,7 @@ var Reader = function Reader(props) {
   var requestRef = useRef();
 
   var _useState = useState(null),
-      _useState2 = slicedToArray(_useState, 2),
+      _useState2 = _slicedToArray(_useState, 2),
       src = _useState2[0],
       setSrc = _useState2[1];
 
@@ -322,7 +191,7 @@ var Reader = function Reader(props) {
       }
     };
   }, [check, constraintsStr, onError, onLoad, src]);
-  return /*#__PURE__*/React.createElement("video", _extends$1({
+  return /*#__PURE__*/React.createElement("video", _extends({
     autoPlay: true,
     playsInline: true,
     src: src,
