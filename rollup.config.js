@@ -9,25 +9,29 @@ import pkg from "./package.json";
 const INPUT_FILE_PATH = "src/index.js";
 const OUTPUT_NAME = "RectQrScanner";
 
-const GLOBALS = {
-  react: "React",
-  "react-dom": "ReactDOM",
-  "prop-types": "PropTypes",
-};
-
 const PLUGINS = [
+  webWorkerLoader({
+    targetPlatform: "browser",
+    inline: true,
+    plugins: [
+      peerDepsExternal(),
+      babel({
+        babelHelpers: "runtime",
+        exclude: "node_modules/**",
+      }),
+      resolve({
+        browser: true,
+      }),
+      commonjs()
+    ],
+  }),
   peerDepsExternal(),
   babel({
     babelHelpers: "runtime",
     exclude: "node_modules/**",
   }),
-  webWorkerLoader({
-    targetPlatform: "browser",
-    inline: false,
-  }),
   resolve({
     browser: true,
-    resolveOnly: [/^(?!react$)/, /^(?!react-dom$)/, /^(?!prop-types)/],
   }),
   commonjs(),
 ];
@@ -35,10 +39,7 @@ const PLUGINS = [
 const EXTERNAL = ["react", "react-dom", "prop-types"];
 
 // https://github.com/rollup/plugins/tree/master/packages/babel#babelhelpers
-const CJS_AND_ES_EXTERNALS = EXTERNAL.concat(
-  /@baberk\/runtime/,
-  /@zxing\/library/
-);
+const CJS_AND_ES_EXTERNALS = EXTERNAL.concat(/@baberk\/runtime/);
 
 const OUTPUT_DATA = [
   {
@@ -52,7 +53,7 @@ const OUTPUT_DATA = [
   },
   {
     file: pkg.module,
-    format: "es",
+    format: "esm",
   },
 ];
 
@@ -63,9 +64,8 @@ const config = OUTPUT_DATA.map(({ file, format, exports }) => ({
     format,
     exports,
     name: OUTPUT_NAME,
-    // globals: GLOBALS,
   },
-  external: ["cjs", "es"].includes(format) ? CJS_AND_ES_EXTERNALS : EXTERNAL,
+  external: ["cjs", "esm"].includes(format) ? CJS_AND_ES_EXTERNALS : EXTERNAL,
   plugins: PLUGINS,
 }));
 
