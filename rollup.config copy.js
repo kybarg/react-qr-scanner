@@ -1,13 +1,12 @@
 import babel from "@rollup/plugin-babel";
 import resolve from "@rollup/plugin-node-resolve";
 import commonjs from "@rollup/plugin-commonjs";
-import webWorkerLoader from "rollup-plugin-web-worker-loader";
-import peerDepsExternal from "rollup-plugin-peer-deps-external";
-
+import filesize from "rollup-plugin-filesize";
+import webWorkerLoader from 'rollup-plugin-web-worker-loader';
 import pkg from "./package.json";
 
 const INPUT_FILE_PATH = "src/index.js";
-const OUTPUT_NAME = "RectQrScanner";
+const OUTPUT_NAME = "Example";
 
 const GLOBALS = {
   react: "React",
@@ -16,29 +15,25 @@ const GLOBALS = {
 };
 
 const PLUGINS = [
-  peerDepsExternal(),
+  webWorkerLoader({
+    targetPlatform: "browser",
+  }),
   babel({
     babelHelpers: "runtime",
     exclude: "node_modules/**",
-  }),
-  webWorkerLoader({
-    targetPlatform: "browser",
-    inline: false,
   }),
   resolve({
     browser: true,
     resolveOnly: [/^(?!react$)/, /^(?!react-dom$)/, /^(?!prop-types)/],
   }),
   commonjs(),
+  filesize(),
 ];
 
 const EXTERNAL = ["react", "react-dom", "prop-types"];
 
 // https://github.com/rollup/plugins/tree/master/packages/babel#babelhelpers
-const CJS_AND_ES_EXTERNALS = EXTERNAL.concat(
-  /@baberk\/runtime/,
-  /@zxing\/library/
-);
+const CJS_AND_ES_EXTERNALS = EXTERNAL.concat(/@babel\/runtime/);
 
 const OUTPUT_DATA = [
   {
@@ -48,22 +43,20 @@ const OUTPUT_DATA = [
   {
     file: pkg.main,
     format: "cjs",
-    exports: "default",
   },
   {
     file: pkg.module,
-    format: "es",
+    format: "esm",
   },
 ];
 
-const config = OUTPUT_DATA.map(({ file, format, exports }) => ({
+const config = OUTPUT_DATA.map(({ file, format }) => ({
   input: INPUT_FILE_PATH,
   output: {
     file,
     format,
-    exports,
     name: OUTPUT_NAME,
-    // globals: GLOBALS,
+    globals: GLOBALS,
   },
   external: ["cjs", "es"].includes(format) ? CJS_AND_ES_EXTERNALS : EXTERNAL,
   plugins: PLUGINS,

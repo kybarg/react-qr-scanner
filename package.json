@@ -12,30 +12,38 @@
     "dev": "rollup -c -w",
     "test": "node test/test.js",
     "pretest": "npm run build",
-    "storybook": "start-storybook -p 9001",
-    "storybook:export": "build-storybook -c .storybook -o ./docs",
     "lint": "eslint ./src",
-    "prepublishOnly": "npm run build"
+    "prepublishOnly": "npm run build",
+    "storybook": "start-storybook -p 6006",
+    "build-storybook": "build-storybook"
   },
   "files": [
     "dist"
   ],
   "devDependencies": {
+    "@babel/core": "^7.18.13",
     "@babel/plugin-transform-runtime": "^7.18.10",
+    "@babel/preset-react": "^7.18.6",
     "@rollup/plugin-babel": "^5.3.1",
     "@rollup/plugin-commonjs": "^22.0.2",
     "@rollup/plugin-node-resolve": "^13.3.0",
     "@storybook/addon-actions": "^6.5.10",
-    "@storybook/cli": "^6.5.10",
+    "@storybook/addon-essentials": "^6.5.10",
+    "@storybook/addon-interactions": "^6.5.10",
+    "@storybook/addon-links": "^6.5.10",
+    "@storybook/builder-webpack4": "^6.5.10",
+    "@storybook/manager-webpack4": "^6.5.10",
     "@storybook/react": "^6.5.10",
+    "@storybook/testing-library": "^0.0.13",
+    "babel-loader": "^8.2.5",
     "eslint": "^8.22.0",
     "eslint-config-react-app": "^7.0.1",
     "rollup": "^2.78.1",
+    "rollup-plugin-filesize": "^9.1.2",
     "rollup-plugin-peer-deps-external": "^2.2.4",
     "rollup-plugin-web-worker-loader": "^1.6.1"
   },
   "dependencies": {
-    "@babel/runtime": "^7.18.9",
     "@zxing/library": "^0.19.1"
   },
   "peerDependencies": {
