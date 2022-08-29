@@ -22,7 +22,8 @@ const stopMediaStream = (stream) => {
 };
 
 const Reader = (props) => {
-  const { constraints, onError, onLoad, onScan, resolution, ...other } = props;
+  const { constraints, onError, onLoad, onScan, resolution, qrArea, ...other } =
+    props;
   const constraintsStr = JSON.stringify(constraints);
 
   const streamRef = React.useRef(null);
@@ -65,23 +66,34 @@ const Reader = (props) => {
       let height = videoEl.current.videoHeight;
 
       const greatestSize = width > height ? width : height;
-      const ratio = resolution / greatestSize;
+      const ratio = Math.floor((resolution / greatestSize) * 100) / 100;
 
-      height = ratio * height;
-      width = ratio * width;
+      height = Math.floor(ratio * height);
+      width = Math.floor(ratio * width);
 
       canvasEl.current.width = width;
       canvasEl.current.height = height;
 
       ctxRef.current = canvasEl.current.getContext("2d");
       ctxRef.current.drawImage(videoEl.current, 0, 0, width, height);
-      const imageData = ctxRef.current.getImageData(0, 0, width, height);
+      let imageData;
+      if (qrArea && qrArea.length === 2 && qrArea[0] > 0 && qrArea[1] > 0) {
+        imageData = ctxRef.current.getImageData(
+          Math.floor((width - qrArea[0]) / 2),
+          Math.floor((height - qrArea[1]) / 2),
+          qrArea[0],
+          qrArea[1]
+        );
+      } else {
+        imageData = ctxRef.current.getImageData(0, 0, width, height);
+      }
+
       // Send data to web-worker
       worker.postMessage(imageData);
     }
 
     requestRef.current = requestAnimationFrame(check);
-  }, [resolution]);
+  }, [resolution, qrArea]);
 
   React.useEffect(() => {
     const constraints = JSON.parse(constraintsStr);
@@ -130,11 +142,13 @@ Reader.propTypes = {
   onLoad: PropTypes.func,
   onScan: PropTypes.func.isRequired,
   resolution: PropTypes.number,
+  qrArea: PropTypes.array,
 };
 
 Reader.defaultProps = {
   constraints: { audio: false, video: true },
   resolution: 640,
+  qrArea: [],
 };
 
 export default Reader;

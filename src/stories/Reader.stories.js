@@ -11,6 +11,7 @@ export default {
   args: {
     constraints: { audio: false, video: true },
     resolution: 640,
+    qrArea: [320, 320],
   },
 
   argTypes: {
@@ -34,6 +35,16 @@ export default {
       control: { type: "number", min: 320, max: 1280, step: 10 },
     },
 
+    qrArea: {
+      type: { name: "array", required: false },
+      description: "Width and height for the qr scanning area",
+      table: {
+        type: { summary: "array" },
+        defaultValue: { summary: [] },
+      },
+      control: { type: "array" },
+    },
+
     onScan: {
       action: "Scan",
       description: "Fired after each processed snapshot.",
@@ -44,7 +55,8 @@ export default {
     },
     onLoad: {
       action: "Loaded",
-      description: "Fired after camera is loaded and started processing stream.",
+      description:
+        "Fired after camera is loaded and started processing stream.",
       table: {
         type: { summary: "function" },
         defaultValue: { summary: "() => {}" },
@@ -57,7 +69,7 @@ export default {
         type: { summary: "function" },
         defaultValue: { summary: "(error) => {}" },
       },
-    }
+    },
   },
 };
 
