@@ -24,8 +24,6 @@ const stopMediaStream = (stream) => {
 const Reader = (props) => {
   const { constraints, onError, onLoad, onScan, resolution, qrArea, ...other } =
     props;
-  const constraintsStr = JSON.stringify(constraints);
-
   const streamRef = React.useRef(null);
   const videoEl = React.useRef(null);
   const canvasEl = React.useRef(document.createElement("canvas"));
@@ -51,7 +49,10 @@ const Reader = (props) => {
     };
   }, [onScan]);
 
+  const qrAreaStr = JSON.stringify(qrArea);
+
   const check = React.useCallback(() => {
+    const qrArea = JSON.parse(qrAreaStr);
     const worker = workerRef.current;
 
     const videoIsPlaying =
@@ -93,7 +94,9 @@ const Reader = (props) => {
     }
 
     requestRef.current = requestAnimationFrame(check);
-  }, [resolution, qrArea]);
+  }, [resolution, qrAreaStr]);
+
+  const constraintsStr = JSON.stringify(constraints);
 
   React.useEffect(() => {
     const constraints = JSON.parse(constraintsStr);
