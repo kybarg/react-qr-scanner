@@ -3,7 +3,7 @@ import React from "react";
 import Reader from "../..";
 
 // More on default export: https://storybook.js.org/docs/react/writing-stories/introduction#default-export
-export default {
+const story = {
   title: "Reader",
   component: Reader,
   // More on argTypes: https://storybook.js.org/docs/react/api/argtypes
@@ -78,3 +78,5 @@ const Template = (args) => <Reader {...args} />;
 
 export const Default = Template.bind({});
 Default.args = {};
+
+export default story
